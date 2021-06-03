@@ -1,0 +1,11 @@
+SobelMinPorog: 77
+Width: 150
+Heiht: 100
+Contrast: 25
+BlurFilter: 3
+BlurValue: 3
+StrongFilter: 4
+Strong %: 4
+Prediction Pixel %: 5
+Min Prediction Pixel Width: 3
+Min Prediction Pixel Height: 3

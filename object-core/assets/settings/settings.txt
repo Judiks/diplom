@@ -1,0 +1,8 @@
+SobelMinPorog: 0
+Width: 387
+Heiht: 402
+Contrast: 100
+BlurFilter: 3
+BlurValue: 22
+StrongFilter: 4
+Strong %: 15

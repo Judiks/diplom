@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>object_recognition</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.1.4349" />
+    <PackageReference Include="Microsoft.ML" Version="1.5.5" />
+    <PackageReference Include="Microsoft.ML.ImageAnalytics" Version="1.5.5" />
+    <PackageReference Include="Microsoft.ML.TensorFlow" Version="1.5.5" />
+    <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\object-core\object-core.csproj" />
+  </ItemGroup>
+
+</Project>
