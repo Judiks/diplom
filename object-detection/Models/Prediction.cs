@@ -22,5 +22,6 @@ namespace object_detector.Models
         public double Score { get; set; }
         public string Label { get; set; }
         public double MaxPercent { get; set; }
+        public bool IsSave { get; set; }
     }
 }

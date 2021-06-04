@@ -39,6 +39,7 @@
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox12 = new System.Windows.Forms.CheckBox();
             this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.checkBox10 = new System.Windows.Forms.CheckBox();
             this.checkBox9 = new System.Windows.Forms.CheckBox();
@@ -51,7 +52,7 @@
             this.checkBox2 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.checkBox12 = new System.Windows.Forms.CheckBox();
+            this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -143,6 +144,7 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.checkBox13);
             this.panel1.Controls.Add(this.checkBox12);
             this.panel1.Controls.Add(this.checkBox11);
             this.panel1.Controls.Add(this.checkBox10);
@@ -160,6 +162,18 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(220, 512);
             this.panel1.TabIndex = 4;
+            // 
+            // checkBox12
+            // 
+            this.checkBox12.AutoSize = true;
+            this.checkBox12.Location = new System.Drawing.Point(13, 152);
+            this.checkBox12.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox12.Name = "checkBox12";
+            this.checkBox12.Size = new System.Drawing.Size(112, 19);
+            this.checkBox12.TabIndex = 11;
+            this.checkBox12.Text = "Sobel with black";
+            this.checkBox12.UseVisualStyleBackColor = true;
+            this.checkBox12.CheckedChanged += new System.EventHandler(this.checkBox12_CheckedChanged);
             // 
             // checkBox11
             // 
@@ -303,17 +317,16 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(223, 512);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
-            // checkBox12
+            // checkBox13
             // 
-            this.checkBox12.AutoSize = true;
-            this.checkBox12.Location = new System.Drawing.Point(13, 152);
-            this.checkBox12.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBox12.Name = "checkBox12";
-            this.checkBox12.Size = new System.Drawing.Size(112, 19);
-            this.checkBox12.TabIndex = 11;
-            this.checkBox12.Text = "Sobel with black";
-            this.checkBox12.UseVisualStyleBackColor = true;
-            this.checkBox12.CheckedChanged += new System.EventHandler(this.checkBox12_CheckedChanged);
+            this.checkBox13.AutoSize = true;
+            this.checkBox13.Location = new System.Drawing.Point(13, 340);
+            this.checkBox13.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBox13.Name = "checkBox13";
+            this.checkBox13.Size = new System.Drawing.Size(112, 19);
+            this.checkBox13.TabIndex = 12;
+            this.checkBox13.Text = "Save Predictions";
+            this.checkBox13.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -366,6 +379,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.CheckBox checkBox11;
         private System.Windows.Forms.CheckBox checkBox12;
+        private System.Windows.Forms.CheckBox checkBox13;
     }
 }
 

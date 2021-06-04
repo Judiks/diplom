@@ -16,12 +16,16 @@ using Microsoft.Extensions.DependencyInjection;
 using object_recognition.Services.Interfaces;
 using object_recognition.Services;
 using GleamTech.VideoUltimate;
+using object_core.Constants;
+using System.IO;
+using System.Linq;
 
 namespace object_detector
 {
     public partial class Form1 : Form
     {
         // B G R A
+        private readonly object _lock = new object();
         private OpenFileDialog _openFileDialog { get; set; }
         private VideoFrameReader _videoFrameReader { get; set; }
         private List<Bitmap> _imagesFromVideo { get; set; }
@@ -58,6 +62,7 @@ namespace object_detector
         public bool _isClustering { get; set; }
         public bool _isVideo { get; set; }
         public bool _dispalyTrash { get; set; }
+        public bool _savePredictions { get; set; }
         public string _fileName { get; set; }
         CancellationTokenSource _videoFromFile { get; set; }
         public Form2 _settingsForm { get; set; }
@@ -95,6 +100,7 @@ namespace object_detector
             checkBox10.Checked = _isClustering = true;
             checkBox11.Checked = _dispalyTrash = false;
             checkBox12.Checked = _isSobel2 = true;
+            checkBox13.Checked = _savePredictions = false;
             _settingsForm = new Form2(this);
             var deviceCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             _captureDevice = new VideoCaptureDevice(deviceCollection[0].MonikerString);
@@ -152,11 +158,17 @@ namespace object_detector
                         //So it's good practice to have a "using" statement for the retrieved bitmap.
                         using (var frame = _videoFrameReader.GetFrame())
                         {
-                            var image = DetectPredictions(frame);
-                            UpdateToolSripMenu(image);
-                            pictureBox1.Image = image;
-                            //_imagesFromVideo.Add(image);
-                            i++;
+                            try
+                            {
+                                var image = DetectPredictions(frame);
+                                UpdateToolSripMenu(image);
+                                pictureBox1.Image = image;
+                                //_imagesFromVideo.Add(image);
+                                i++;
+                            } catch(Exception ex)
+                            {
+                                throw ex;
+                            }
                         }
                     }
                     _isVideo = false;
@@ -273,6 +285,10 @@ namespace object_detector
                     prediction.Image = image;
                     prediction.Label = mlPrediction.PredictedLabelValue;
                     prediction.Score = mlPrediction.CurrentScore;
+                    if (prediction.Score > 0.9)
+                    {
+                        prediction.IsSave = true;
+                    }
                     mlNetResult.Add(prediction);
                 }
             }
@@ -304,20 +320,10 @@ namespace object_detector
                         flowLayoutPanel1.SetFlowBreak(viewTextScore, true);
                     }));
                 }
-
-                //var files = Directory.GetFiles($"{AppConstant.TrainDataPath}\\{prediction.Label}");
-
-                //var lastIndex = files.ToList().Max(x => {
-                //    var fileName = x.Substring(x.LastIndexOf("\\") + 1);
-                //    var startIndex = fileName.IndexOf(prediction.Label) + prediction.Label.Length;
-                //    var endIndex = fileName.IndexOf(".");
-                //    var index = fileName.Substring(startIndex, endIndex - startIndex);
-                //    return int.Parse(index);
-                //});
-
-                //int newIndex = lastIndex + 1;
-                //prediction.Image.Save($"{AppConstant.TrainDataPath}\\{prediction.Label}\\{prediction.Label}{newIndex}.jpg");
-
+                if (prediction.IsSave && _savePredictions)
+                {
+                    SaveImage(prediction.Image, prediction.Label);
+                }
             }
             if (flowLayoutPanel1.Controls.Count > 30)
             {
@@ -333,6 +339,49 @@ namespace object_detector
                 }
             }
             return resultBuffer;
+        }
+
+        public void SaveImage(Bitmap image, string name)
+        {
+            try
+            {
+                var files = Directory.GetFiles($"{AppConstant.TrainDataPath}\\{name}");
+
+                var lastIndex = files.ToList().Max(x =>
+                {
+                    var fileName = x.Substring(x.LastIndexOf("\\") + 1);
+                    var startIndex = fileName.IndexOf(name) + name.Length;
+                    var endIndex = fileName.IndexOf(".");
+                    var index = fileName.Substring(startIndex, endIndex - startIndex);
+                    return int.Parse(index);
+                });
+
+                int newIndex = lastIndex + 1;
+                string fileName = $"{AppConstant.TrainDataPath}\\{name}\\{name}{newIndex}.jpg";
+                newIndex = File.Exists(fileName) ? newIndex++ : newIndex;
+                image.Save(fileName);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public  bool isFileLocked(string name)
+        {
+            FileStream stream = null;
+
+            try
+            {
+                stream = File.Open(name, FileMode.Open, FileAccess.Read, FileShare.None);
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+
+            return stream.CanRead;
         }
 
         public void DisplayPrediction(Prediction prediction, BitmapData srcInputData, ref byte[] resultBuffer, int sizeCoef)
